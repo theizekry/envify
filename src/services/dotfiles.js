@@ -64,7 +64,7 @@ const dotfiles = {
       'Dotfiles installed',
       'Failed to install dotfiles',
       async () => {
-        await this.cloneRepository()
+        await this.cloneRepository().then(async () => await this.linkFiles())
         return Promise.resolve()
       },
       async error => {
@@ -123,9 +123,6 @@ const dotfiles = {
       .run(
         `GIT_SSH_COMMAND="ssh -i ~/.ssh/envify" git clone ${url} ${cloningPath}`
       )
-
-    // TODO :: linking the files or resolve promise
-    // .then()
   },
 
   async parseUrl() {
@@ -174,17 +171,57 @@ const dotfiles = {
         }
       })
   },
-  //
-  // async moveFilesToHomeDirectory() {
-  //   // Link
-  //   // if yes move
-  //   try {
-  //     await runner.run(`git clone ${url} ~/dotfiles`)
-  //     return Promise.resolve()
-  //   } catch (error) {
-  //     return Promise.reject(error)
-  //   }
-  // },
+
+  async linkFiles() {
+    console.log('sdsdsdsdsds', this.moveFilesToHomeDirectoryDirectory)
+
+    // if (!this.moveFilesToHomeDirectoryDirectory) {
+    //   return
+    // }
+    //
+    // let srcDir = `/home/${username}/${this.repository.repo}`
+    //
+    // output().text(srcDir).log()
+    //
+    // try {
+    //   const items = await fs.readdir(srcDir, { withFileTypes: true })
+    //
+    //   for (const item of items) {
+    //     const srcPath = path.join(srcDir, item.name)
+    //     const destPath = path.join(destDir, item.name)
+    //
+    //     if (item.isDirectory()) {
+    //       // Remove existing directory or symlink if it exists
+    //       try {
+    //         await fs.unlink(destPath)
+    //       } catch (err) {
+    //         if (err.code === 'EISDIR' || err.code === 'ENOENT') {
+    //           await fs.rmdir(destPath, { recursive: true }).catch(() => {})
+    //         } else {
+    //           await Promise.reject('Skipped 00')
+    //         }
+    //       }
+    //       // Create a symbolic link to the directory
+    //       await fs.symlink(srcPath, destPath, 'junction')
+    //     } else {
+    //       // Remove existing file or symlink if it exists
+    //       try {
+    //         await fs.unlink(destPath)
+    //       } catch (err) {
+    //         if (err.code !== 'ENOENT') {
+    //           await Promise.reject('Skipped 11')
+    //         }
+    //       }
+    //       // Create a symbolic link to the file
+    //       await fs.symlink(srcPath, destPath)
+    //     }
+    //   }
+    //
+    //   return Promise.resolve('Files linked successfully')
+    // } catch (error) {
+    //   return Promise.reject(error)
+    // }
+  },
 
   async handlePrivateRepository() {
     try {
